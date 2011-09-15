@@ -3,3 +3,18 @@ Space Shooter by Vedilion.
 A Java based multiplayer game based on Space invader, Raptor and other related games.
 
 - The game really needs a name right now, which will help give the game a direction.
+
+
+-- Getting started with the game --
+The newest builds can be found in the "Builds" folder on github.
+Unpack the two .jar files in the downloaded .rar file.
+
+1. To start a server, just open the xxxx-xx-xx_game_server.jar, and you'r ready.
+If you want people to connect over the internet, make sure your por t 9090 is open.
+
+2. To start a "singleplayer" game, you still have to start a multiplayer server as above.
+Then you open the xxxx-xx-xx_game_client.jar file. The server field is already pre-filled with "localhost",, so you don't have to do anything here.
+In the Username field, you type in the username you want to use.
+When you click the login button, you will see stars moving. Do any action to join the game now.
+
+3. Joining a multiplayer game is almost like step 2. Only exception is that the "localhost" should instead be the IP of the computer running the server.
