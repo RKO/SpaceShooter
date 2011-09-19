@@ -24,6 +24,12 @@ public class BaseUnit {
 	private int hp = 0;
 	private int maxShield = 0;
 	private int shield = maxShield;
+	private int credits = 0;
+	private int laserLevel = 1;
+	private int missileLevel = 1;
+	private int hullLevel = 1;
+	private int shieldLevel = 1;
+	private int speedLevel = 1;
 
 	public BaseUnit(String name, String type, String[] imageNames) {
 		this.name = name;
@@ -183,5 +189,53 @@ public class BaseUnit {
 
 	public void setIsFriendly(boolean friendly) {
 		this.friendly = friendly;
+	}
+
+	public void setLaserLevel(int laserLevel) {
+		this.laserLevel = laserLevel;
+	}
+
+	public int getLaserLevel() {
+		return laserLevel;
+	}
+
+	public void setMissileLevel(int missileLevel) {
+		this.missileLevel = missileLevel;
+	}
+
+	public int getMissileLevel() {
+		return missileLevel;
+	}
+
+	public void setHullLevel(int hullLevel) {
+		this.hullLevel = hullLevel;
+	}
+
+	public int getHullLevel() {
+		return hullLevel;
+	}
+
+	public void setShieldLevel(int shieldLevel) {
+		this.shieldLevel = shieldLevel;
+	}
+
+	public int getShieldLevel() {
+		return shieldLevel;
+	}
+
+	public void setSpeedLevel(int speedLevel) {
+		this.speedLevel = speedLevel;
+	}
+
+	public int getSpeedLevel() {
+		return speedLevel;
+	}
+
+	public void setCredits(int credits) {
+		this.credits = credits;
+	}
+
+	public int getCredits() {
+		return credits;
 	}
 }

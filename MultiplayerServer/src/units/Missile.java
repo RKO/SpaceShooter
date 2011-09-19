@@ -10,13 +10,14 @@ public class Missile extends Projectile {
 	private boolean left = true;
 	private int distanceTraveled = 0;
 	private Rectangle targetArea;
-	private int level = 2;
+	private int level = 1;
 	private Craft enemyTarget;
 
-	public Missile(String name, int x, int y, boolean friendly, boolean left, Rectangle source) {
+	public Missile(String name, int x, int y, boolean friendly, boolean left, Rectangle source, int level) {
 		super(name, x, y, friendly, damage, Projectile.TYPE_MISSILE);
 		this.left = left;
-		if(level == 1) {
+		this.level = level;
+		if(this.level == 1) {
 			this.targetArea = source;
 		}
 		else {

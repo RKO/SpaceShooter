@@ -74,6 +74,10 @@ public class WorkerRunnable implements Runnable {
 					out.println(outputLine);
 					server.addToList(this);
 				}
+				else if(inputLine.startsWith(CommunicationProtocol.UPGRADE_EVENT)) {
+					int upgradeNumber = Integer.parseInt(inputLine.replace(CommunicationProtocol.UPGRADE_EVENT, ""));
+					client.upgrade(upgradeNumber);
+				}
 				else if(inputLine.startsWith(CommunicationProtocol.MOVE_REQUEST)) {
 					Rectangle rect = server.getGame().getBounds();
 					if(inputLine.contains(""+KEY_DOWN)) {

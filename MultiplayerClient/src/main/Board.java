@@ -4,7 +4,7 @@ import graphics.Animation;
 import graphics.Explotion;
 import graphics.ImageHandler;
 import java.awt.Color;
-import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
@@ -19,6 +19,7 @@ import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import menu.BoardMenu;
+import menu.BoardSideMenu;
 import units.Craft;
 import units.BaseUnit;
 import units.Projectile;
@@ -39,6 +40,7 @@ public class Board extends JPanel implements ActionListener {
 	private int starRowCount = 0;
 	private String keyDown = "";
 	private BoardMenu menu;
+	private BoardSideMenu sideMenu;
 	private int fireMode = 0;
 
 	public Board(ClientView callback, int width, int height, JPanel container) {	
@@ -48,13 +50,14 @@ public class Board extends JPanel implements ActionListener {
 		this.setFocusable(true);
 		this.setBackground(Color.BLACK);
 		this.setDoubleBuffered(true);
+		this.setPreferredSize(new Dimension(width, height));
 		this.setSize(width, height);
-		this.setAlignmentY(Component.TOP_ALIGNMENT);
 
 		menu = new BoardMenu(callback, this, width, ClientView.menuHight);
-
+		sideMenu = new BoardSideMenu(this, ClientView.menuWidth, height);
 		container.add(this);
-		container.add(menu);
+		container.add(menu, "dock south");
+		container.add(sideMenu, "east");
 
 		addKeyListener (new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
@@ -100,6 +103,8 @@ public class Board extends JPanel implements ActionListener {
 		menu.displayFPS(""+FPSCounter.getFPS());
 		menu.displayStatus(unitTable.get(clientView.getPlayerName()));
 		menu.displayFiremode(fireModeString);
+		
+		sideMenu.updateUpgrades(unitTable.get(clientView.getPlayerName()));
 
 		Graphics2D g2d = (Graphics2D)g;
 
@@ -179,7 +184,7 @@ public class Board extends JPanel implements ActionListener {
 			}
 		}
 		if(keyDown.length() > 0) {
-			clientView.sendEvent(keyDown);
+			clientView.sendMoveEvent(keyDown);
 		}
 
 		Toolkit.getDefaultToolkit().sync();
@@ -225,9 +230,15 @@ public class Board extends JPanel implements ActionListener {
 		if(unit != null) {
 			unit.setX(u.getX());
 			unit.setY(u.getY());
+			unit.setMaxHp(u.getMaxHp());
 			unit.setHp(u.getHp());
 			unit.setAliveState(u.isAlive());
 			unit.setShield(u.getShield());
+			unit.setLaserLevel(u.getLaserLevel());
+			unit.setMissileLevel(u.getMissileLevel());
+			unit.setHullLevel(u.getHullLevel());
+			unit.setShieldLevel(u.getShieldLevel());
+			unit.setSpeedLevel(u.getSpeedLevel());
 		}
 		else {
 			unitTable.put(u.getName(), u);
@@ -268,5 +279,10 @@ public class Board extends JPanel implements ActionListener {
 
 	public void printMessage(String message) {
 		menu.printMessage(message);
+	}
+	
+	
+	public void upgrade(int upgrade) {
+		clientView.sendUpgradeMessage(upgrade);
 	}
 }

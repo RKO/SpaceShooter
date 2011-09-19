@@ -1,10 +1,11 @@
 package main;
 
+import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import net.miginfocom.swing.MigLayout;
 import menu.LoginMenu;
 import units.BaseUnit;
 
@@ -13,11 +14,9 @@ public class ClientView extends JFrame implements WindowListener{
 	public static final int width = 1024;//800 //1024
 	public static final int height = 733;//640 // 733// -35
 	public static int menuHight = 100;
+	public static final int menuWidth = 175;
 	private Client client;
 	private String name;
-	//private JPanel loginPanel;
-	//private JTextField inputField;
-	//private JTextArea messageArea;
 	private Board board;
 	private JPanel boardPanel;
 
@@ -32,7 +31,9 @@ public class ClientView extends JFrame implements WindowListener{
 		setupLoginView();
 		setVisible(true);
 		boardPanel = new JPanel();
-		boardPanel.setLayout(new BoxLayout(boardPanel, BoxLayout.Y_AXIS));
+		boardPanel.setBackground(Color.BLACK);
+		MigLayout migLayout = new MigLayout("", "[][]0[]", "[]0[]");
+		boardPanel.setLayout(migLayout);
 		board = new Board(this, width, height, boardPanel);
 	}
 
@@ -61,7 +62,7 @@ public class ClientView extends JFrame implements WindowListener{
 	public void setupGameView() {
 		this.getContentPane().removeAll();
 		this.add(boardPanel);
-		setSize(width, height+menuHight);
+		setSize(width+menuWidth, height+menuHight);
 		board.requestFocus();
 	}
 
@@ -73,6 +74,10 @@ public class ClientView extends JFrame implements WindowListener{
 	public void sendChatMessage(String message) {
 		client.sendMessage(message);
 	}
+	
+	public void sendUpgradeMessage(int upgrade) {
+		client.sendCode(CommunicationProtocol.UPGRADE_EVENT+upgrade);
+	}
 
 	public void login(String serverName) {
 		client = new Client(serverName, name, board);
@@ -80,7 +85,7 @@ public class ClientView extends JFrame implements WindowListener{
 		clientThread.start();
 	}
 
-	public void sendEvent(String direction) {
+	public void sendMoveEvent(String direction) {
 		if(client != null) {
 			BaseUnit ownerCraft = board.getUnit(name);
 			if(ownerCraft != null) {

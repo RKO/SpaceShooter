@@ -37,12 +37,12 @@ public class Client implements Runnable {
 		try {
 			try {
 				requestSocket = new Socket(serverAddress, port);
-				
+
 				CompressedBlockOutputStream compressed = new CompressedBlockOutputStream(requestSocket.getOutputStream(), 1024);
 				out = new PrintWriter(new OutputStreamWriter(compressed));
-				
+
 				in = new BufferedReader(new InputStreamReader(new CompressedBlockInputStream(requestSocket.getInputStream())));
-				
+
 			} catch (UnknownHostException e) {
 				showMessage("Don't know about host: "+serverAddress);
 				Toolkit.getDefaultToolkit().beep();
@@ -95,6 +95,7 @@ public class Client implements Runnable {
 				for(String s : positions) {
 					if(s.length() > 0) {
 						String[] information = s.split(":");
+						
 						String name = information[0];
 						String type = information[1];
 						int x = Integer.parseInt(information[2]);
@@ -104,7 +105,7 @@ public class Client implements Runnable {
 						int maxHp = Integer.parseInt(information[6]);
 						int shield = Integer.parseInt(information[7]);
 						int maxShield = Integer.parseInt(information[8]);
-						
+
 						BaseUnit c = new Craft(name, type);
 						c.setX(x);
 						c.setY(y);
@@ -113,6 +114,21 @@ public class Client implements Runnable {
 						c.setMaxHp(maxHp);
 						c.setShield(shield);
 						c.setMaxShield(maxShield);
+						if(information.length > 9) {
+							int credits = Integer.parseInt(information[9]);
+							int laser = Integer.parseInt(information[10]);
+							int missile = Integer.parseInt(information[11]);
+							int hull = Integer.parseInt(information[12]);
+							int shieldLevel = Integer.parseInt(information[13]);
+							int speed  = Integer.parseInt(information[14]);
+
+							c.setCredits(credits);
+							c.setLaserLevel(laser);
+							c.setMissileLevel(missile);
+							c.setHullLevel(hull);
+							c.setShieldLevel(shieldLevel);
+							c.setSpeedLevel(speed);
+						}
 						//clientView.addUnit(c);
 						board.addUnit(c);
 					}
@@ -129,7 +145,7 @@ public class Client implements Runnable {
 						int y = Integer.parseInt(information[3]);
 						Boolean friendly = Boolean.parseBoolean(information[4]);
 						Boolean alive = Boolean.parseBoolean(information[5]);
-						
+
 						BaseUnit m = new Projectile(id, type);
 						m.setX(x);
 						m.setY(y);

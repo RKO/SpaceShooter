@@ -18,6 +18,12 @@ public class PlayerConnection extends Craft {
 	private final int WEAPON_OFFSET_X_RIGHT = 11;
 	private final int WEAPON_OFFSET_Y = 30;
 	private final int FIREMODE_SPRAY = 0;
+	private int laserLevel = 1;
+	private int missileLevel = 1;
+	private int hullLevel = 1;
+	private int shieldLevel = 1;
+	private int speedLevel = 1;
+	private int credits = 0;
 	private static final int FIREMODE_BURST = 1;
 	private InetAddress inetAddress;
 	private Socket socket;
@@ -34,7 +40,7 @@ public class PlayerConnection extends Craft {
 	private int fireDelayTime = fireDelayLoops*10;
 	private int specialFireDelayLoops = 20;
 	private int specialFireDelayTime = 3000;
-	
+
 	public PlayerConnection(Socket socket, int x, int y) {
 		super(x, y, Craft.TYPE_FRIENDLY);
 		this.socket = socket;
@@ -42,13 +48,9 @@ public class PlayerConnection extends Craft {
 		lastFire = new Date();
 		lastFireSpecial = new Date();
 		setMaxHp(10);
-		//maxHp = 10;
-		//hp = 10;
 		setMaxShield(15);
-		//maxShield = 15;
-		//shield = maxShield;
 		setDamage(1);
-		//damage = 1;
+		setSpeed(BASE_SPEED);
 	}
 
 	public void tick() {
@@ -73,30 +75,30 @@ public class PlayerConnection extends Craft {
 	public Socket getSocket(){
 		return socket;
 	}
-	
+
 	public void moveDown(Rectangle rect) {
-		int tempY = y+BASE_SPEED;
+		int tempY = y+getSpeed();
 		if(rect.contains(x, tempY+height) && alive) {
 			y = tempY;
 			hasChanged = true;
 		}
 	}
 	public void moveRight(Rectangle rect) {
-		int tempX = x+BASE_SPEED;
+		int tempX = x+getSpeed();
 		if(rect.contains(tempX+width, y) && alive) {
 			x = tempX;
 			hasChanged = true;
 		}
 	}
 	public void moveUp(Rectangle rect) {
-		int tempY = y-BASE_SPEED;
+		int tempY = y-getSpeed();
 		if(rect.contains(x, tempY) && alive) {
 			y = tempY;
 			hasChanged = true;
 		}
 	}
 	public void moveLeft(Rectangle rect) {
-		int tempX = x-BASE_SPEED;
+		int tempX = x-getSpeed();
 		if(rect.contains(tempX, y) && alive) {
 			x = tempX;
 			hasChanged = true;
@@ -173,26 +175,20 @@ public class PlayerConnection extends Craft {
 		Date now = new Date();
 		long difference = now.getTime() - lastFireSpecial.getTime();
 		if(difference > specialFireDelayTime && alive && specialFireLoops >= specialFireDelayLoops) {
-			/*Missile missile = new Missile("missile"+random.nextInt(), x+(width/2), y+WEAPON_OFFSET_Y, true);
-			Game.projectiles.add(missile);*/
-			System.out.println("x"+x);
-			System.out.println("y"+y);
-			System.out.println("width"+width);
-			System.out.println("Game.height"+Game.height);
 			Rectangle missileTarget = new Rectangle(x, 0, width, Game.height);
 			//if(fireLeft) {
-				Missile missile = new Missile("missile"+random.nextInt(), x, y+WEAPON_OFFSET_Y, true, true, missileTarget);
-				Game.projectiles.add(missile);
-				//fireLeft = false;
+			Missile missile = new Missile("missile"+random.nextInt(), x, y+WEAPON_OFFSET_Y, true, true, missileTarget, missileLevel);
+			Game.projectiles.add(missile);
+			//fireLeft = false;
 			//}
 			//else {
-				Missile missile1 = new Missile("missile"+random.nextInt(), x+width, y+WEAPON_OFFSET_Y, true, false, missileTarget);
-				Game.projectiles.add(missile1);
-				//fireLeft = true;
+			Missile missile1 = new Missile("missile"+random.nextInt(), x+width, y+WEAPON_OFFSET_Y, true, false, missileTarget, missileLevel);
+			Game.projectiles.add(missile1);
+			//fireLeft = true;
 			//}
 			lastFireSpecial = now;
 			specialFireLoops = 0;
-			
+
 		}
 	}
 
@@ -207,6 +203,58 @@ public class PlayerConnection extends Craft {
 
 	public void resetChanged() {
 		hasChanged = false;
+	}
+
+	public int getCredits() {
+		return credits;
+	}
+
+	@Override
+	public String getPackageInfo() {
+		System.out.println("GetPackageInfo!");
+		return super.getPackageInfo()+":"+getCredits()+":"+laserLevel+":"+missileLevel+":"+hullLevel+":"+shieldLevel+":"+speedLevel;
+	}
+
+	public void upgrade(int upgrade) {
+		System.out.println("Upgrade "+upgrade);
+		switch (upgrade) {
+		case CommunicationProtocol.UPGRADE_LASER:
+			if(laserLevel < 10) {
+				laserLevel++;
+				double newDamage = (double)((double)laserLevel/(double)2);
+				setDamage((int)(1+newDamage));
+				hasChanged = true;
+			}
+			break;
+		case CommunicationProtocol.UPGRADE_MISSILE:
+			if(missileLevel < 10) {
+				missileLevel++;
+				hasChanged = true;
+			}
+			break;
+		case CommunicationProtocol.UPGRADE_HULL:
+			if(hullLevel < 10) {
+				hullLevel++;
+				increaseMaxHp(1);
+				hasChanged = true;
+			}
+			break;
+		case CommunicationProtocol.UPGRADE_SHIELD:
+			if(shieldLevel < 10) {
+				shieldLevel++;
+				increaseMaxShield(1);
+				hasChanged = true;
+			}
+			break;
+		case CommunicationProtocol.UPGRADE_SPEED:
+			if(speedLevel < 10) {
+				speedLevel++;
+				double newSpeed = (double)BASE_SPEED + (double)((double)speedLevel/3.0);
+				setSpeed((int)newSpeed);
+				hasChanged = true;
+			}
+			break;
+		}
 	}
 
 	@Override

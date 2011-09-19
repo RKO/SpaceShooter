@@ -12,4 +12,11 @@ public class CommunicationProtocol {
 	public static final String POSITION_MESSAGE = "pos:";
 	public static final String PROJECTILE_MESSAGE = "proj:";
 	public static final String PLAYER_LEFT = "pLeft:";
+	public static final String UPGRADE_EVENT = "upg:";
+	
+	public static final int UPGRADE_LASER = 0;
+	public static final int UPGRADE_MISSILE = 1;
+	public static final int UPGRADE_HULL = 2;
+	public static final int UPGRADE_SHIELD = 3;
+	public static final int UPGRADE_SPEED = 4;
 }

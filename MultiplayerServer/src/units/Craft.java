@@ -119,6 +119,11 @@ public class Craft {
 	public int getMaxHp() {
 		return maxHp;
 	}
+	public void increaseMaxHp(int inc) {
+		maxHp = maxHp + inc;
+		hp = hp + inc;
+	}
+	
 	public int getHp() {
 		return hp;
 	}
@@ -126,6 +131,10 @@ public class Craft {
 	public void setMaxShield(int maxShield) {
 		this.maxShield = maxShield;
 		shield = maxShield;
+	}
+	
+	public void increaseMaxShield(int inc) {
+		maxShield = maxShield + inc;
 	}
 	
 	public int getShield() {
