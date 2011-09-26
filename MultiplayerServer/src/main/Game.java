@@ -10,8 +10,8 @@ import units.Projectile;
 public class Game implements Runnable {
 	private static final int GAME_TIMER = 10;
 	private static final int SERVER_TIMRE = 5;
-	public static final int width = 1025;//800 // 1024
-	public static final int height = 693;//600 // 693 //Always -75
+	public static final int width = 1280;//800 // 1024
+	public static final int height = 960;//600 // 768 //Always -75
 	public static ArrayList<Projectile> projectiles;
 	private ArrayList<EnemyCraft> enemies;
 	private MultiThreadedServer server;

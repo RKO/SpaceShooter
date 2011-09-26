@@ -4,7 +4,7 @@ public class EnemyFreighter extends EnemyCraft {
 	protected boolean hasEntered = false;
 	
 	public EnemyFreighter(String name, int x, int y) {
-		super(name, x, y, Craft.TYPE_ENEMY2);
+		super(Craft.STANDARD_WIDTH, Craft.STANDARD_HEIGHT, name, x, y, Craft.TYPE_ENEMY2);
 		setMaxHp(10);
 		//maxHp = 10;
 		//hp = 10;

@@ -42,7 +42,7 @@ public class PlayerConnection extends Craft {
 	private int specialFireDelayTime = 3000;
 
 	public PlayerConnection(Socket socket, int x, int y) {
-		super(x, y, Craft.TYPE_FRIENDLY);
+		super(Craft.STANDARD_WIDTH, Craft.STANDARD_HEIGHT, x, y, Craft.TYPE_FRIENDLY);
 		this.socket = socket;
 		random = new Random();
 		lastFire = new Date();
@@ -78,14 +78,14 @@ public class PlayerConnection extends Craft {
 
 	public void moveDown(Rectangle rect) {
 		int tempY = y+getSpeed();
-		if(rect.contains(x, tempY+height) && alive) {
+		if(rect.contains(x, tempY+getHeight()) && alive) {
 			y = tempY;
 			hasChanged = true;
 		}
 	}
 	public void moveRight(Rectangle rect) {
 		int tempX = x+getSpeed();
-		if(rect.contains(tempX+width, y) && alive) {
+		if(rect.contains(tempX+getWidth(), y) && alive) {
 			x = tempX;
 			hasChanged = true;
 		}
@@ -119,7 +119,7 @@ public class PlayerConnection extends Craft {
 		long difference = now.getTime() - lastFire.getTime();
 		if(difference > fireDelayTime && alive && loops >= fireDelayLoops) {
 			if(fireLeft) {
-				Laser right = new Laser("laser_right"+random.nextInt(), x+width-WEAPON_OFFSET_X_RIGHT, y+WEAPON_OFFSET_Y, true, getDamage(), Projectile.TYPE_LASER_RED);
+				Laser right = new Laser("laser_right"+random.nextInt(), x+getWidth()-WEAPON_OFFSET_X_RIGHT, y+WEAPON_OFFSET_Y, true, getDamage(), Projectile.TYPE_LASER_RED);
 				Game.projectiles.add(right);
 				fireLeft = false;
 			}
@@ -139,7 +139,7 @@ public class PlayerConnection extends Craft {
 		Date now = new Date();
 		long difference = now.getTime() - lastFire.getTime();
 		if(difference > (fireDelayTime*4) && alive && loops >= (fireDelayLoops*4)) {
-			Laser right1 = new Laser("laser_right"+random.nextInt(), x+width-WEAPON_OFFSET_X_RIGHT, y+WEAPON_OFFSET_Y, true, getDamage(), Projectile.TYPE_LASER_RED);
+			Laser right1 = new Laser("laser_right"+random.nextInt(), x+getWidth()-WEAPON_OFFSET_X_RIGHT, y+WEAPON_OFFSET_Y, true, getDamage(), Projectile.TYPE_LASER_RED);
 			right1.setSpeed(15);
 			Game.projectiles.add(right1);
 
@@ -147,7 +147,7 @@ public class PlayerConnection extends Craft {
 			left1.setSpeed(15);
 			Game.projectiles.add(left1);
 
-			Laser right2 = new Laser("laser_right"+random.nextInt(), x+width-WEAPON_OFFSET_X_RIGHT, y+WEAPON_OFFSET_Y+10, true, getDamage(), Projectile.TYPE_LASER_RED);
+			Laser right2 = new Laser("laser_right"+random.nextInt(), x+getWidth()-WEAPON_OFFSET_X_RIGHT, y+WEAPON_OFFSET_Y+10, true, getDamage(), Projectile.TYPE_LASER_RED);
 			right2.setSpeed(15);
 			Game.projectiles.add(right2);
 
@@ -175,14 +175,14 @@ public class PlayerConnection extends Craft {
 		Date now = new Date();
 		long difference = now.getTime() - lastFireSpecial.getTime();
 		if(difference > specialFireDelayTime && alive && specialFireLoops >= specialFireDelayLoops) {
-			Rectangle missileTarget = new Rectangle(x, 0, width, Game.height);
+			Rectangle missileTarget = new Rectangle(x, 0, getWidth(), Game.height);
 			//if(fireLeft) {
 			Missile missile = new Missile("missile"+random.nextInt(), x, y+WEAPON_OFFSET_Y, true, true, missileTarget, missileLevel);
 			Game.projectiles.add(missile);
 			//fireLeft = false;
 			//}
 			//else {
-			Missile missile1 = new Missile("missile"+random.nextInt(), x+width, y+WEAPON_OFFSET_Y, true, false, missileTarget, missileLevel);
+			Missile missile1 = new Missile("missile"+random.nextInt(), x+getWidth(), y+WEAPON_OFFSET_Y, true, false, missileTarget, missileLevel);
 			Game.projectiles.add(missile1);
 			//fireLeft = true;
 			//}
@@ -211,7 +211,6 @@ public class PlayerConnection extends Craft {
 
 	@Override
 	public String getPackageInfo() {
-		System.out.println("GetPackageInfo!");
 		return super.getPackageInfo()+":"+getCredits()+":"+laserLevel+":"+missileLevel+":"+hullLevel+":"+shieldLevel+":"+speedLevel;
 	}
 

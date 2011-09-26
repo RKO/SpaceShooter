@@ -11,8 +11,8 @@ public class EnemyCraft extends Craft {
 	private Random random;
 	protected boolean hasEntered = false;
 	
-	public EnemyCraft(String name, int x, int y, String type) {
-		super(x, y, type);
+	public EnemyCraft(int width, int height, String name, int x, int y, String type) {
+		super(Craft.STANDARD_WIDTH, Craft.STANDARD_HEIGHT, x, y, type);
 		this.name = name;
 		random = new Random();
 		setMaxHp(10);
@@ -26,7 +26,7 @@ public class EnemyCraft extends Craft {
 	
 	public void move() {
 		if(destination.x == x && destination.y == y) {
-			int newX = random.nextInt(Game.width-width);
+			int newX = random.nextInt(Game.width-getWidth());
 			int newY = random.nextInt(Game.height/2);
 			destination = new Point(newX, newY);
 		}
@@ -65,7 +65,7 @@ public class EnemyCraft extends Craft {
 	}
 	
 	public void fire() {
-		Laser left = new Laser("el"+random.nextInt(), x+(width/2)-1, y+height, false, getDamage(), Projectile.TYPE_LASER_GREEN);
+		Laser left = new Laser("el"+random.nextInt(), x+(getWidth()/2)-1, y+getHeight()/2, false, getDamage(), Projectile.TYPE_LASER_GREEN);
 		Game.projectiles.add(left);
 	}
 	

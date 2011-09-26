@@ -27,19 +27,19 @@ public class Wave {
 		for(int i=0; i < enemies.size();i++) {
 			if(enemies.get(i).equals(Craft.TYPE_ENEMY2)) {
 				int x = r.nextInt(Game.width);
-				int y = 0 - Craft.STANDARD_Height* 2;
+				int y = 0 - Craft.STANDARD_HEIGHT* 2;
 				String name = "ec"+r.nextInt();
 				results.add(new EnemyFreighter(name, x, y));
 			}
 			else if(enemies.get(i).equals(Craft.TYPE_ENEMY_WASP)) {
 				int x = r.nextInt(Game.width);
-				int y = 0 - Craft.STANDARD_Height* 2;
+				int y = 0 - Craft.STANDARD_HEIGHT* 2;
 				String name = "ec"+r.nextInt();
 				results.add(new EnemyWasp(name, x, y));
 			}
 			else {
 				int x = r.nextInt(Game.width);
-				int y = 0 - Craft.STANDARD_Height* 2;
+				int y = 0 - Craft.STANDARD_HEIGHT* 2;
 				String name = "ec"+r.nextInt();
 				results.add(new EnemyFighter(name, x, y));
 			}

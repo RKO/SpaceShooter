@@ -129,7 +129,12 @@ public class Board extends JPanel implements ActionListener {
 		for(int i=0; i<animations.size(); i++) {
 			Animation ani = animations.get(i);
 			if(ani.isDone() == false) {
-				g2d.drawImage(ani.getSprite().getImage(), ani.getX(), ani.getY(), ani.getWidth(), ani.getHeight(), null);
+				g2d.drawImage(ani.getSprite().getImage(), 
+						ani.getX(), 
+						ani.getY(), 
+						(int)((double)ani.getWidth()*ClientView.widthFactor), 
+						(int)((double)ani.getHeight()*ClientView.heightFactor),
+						null);
 				ani.tick();
 			}
 			else {
@@ -151,29 +156,33 @@ public class Board extends JPanel implements ActionListener {
 						alpha = 0;
 					}
 					g2d.setColor(new Color(0, 0, 200, alpha));
-					g2d.fillOval(u.getX(), u.getY(), u.getWidth(), u.getHeight());
+					g2d.fillOval(u.getX(), u.getY(), 
+							(int)((double)u.getWidth()*ClientView.widthFactor), 
+							(int)((double)u.getHeight()*ClientView.heightFactor));
 				}
-				g2d.drawImage(u.getImage(), u.getX(), u.getY(), u.getWidth(), u.getHeight(), null);
+				g2d.drawImage(u.getImage(), u.getX(), u.getY(), 
+						(int)((double)u.getWidth()*ClientView.widthFactor), 
+						(int)((double)u.getHeight()*ClientView.heightFactor), null);
 				if(u.getType().equals(Craft.TYPE_FRIENDLY)) {
 					g2d.setColor(Color.RED);
 					g2d.drawString(u.getName(), u.getX(), u.getY());
 					if(u.getHpStrength() <= 50) {
 						g2d.drawImage(ImageHandler.getSprite(this.getClass(), ImageHandler.IMAGE_DAMAGE2).getImage(), 
-								u.getX(), u.getY(), u.getWidth(), u.getHeight(), null);
+								u.getX(), u.getY(), (int)((double)u.getWidth()*ClientView.widthFactor), (int)((double)u.getHeight()*ClientView.heightFactor), null);
 					}
 					else if(u.getHpStrength() <= 75) {
 						g2d.drawImage(ImageHandler.getSprite(this.getClass(), ImageHandler.IMAGE_DAMAGE1).getImage(), 
-								u.getX(), u.getY(), u.getWidth(), u.getHeight(), null);
+								u.getX(), u.getY(), (int)((double)u.getWidth()*ClientView.widthFactor), (int)((double)u.getHeight()*ClientView.heightFactor), null);
 					}
 				}
 				else {
 					if(u.getHpStrength() <= 50) {
 						g2d.drawImage(ImageHandler.getSprite(this.getClass(), ImageHandler.IMAGE_DAMAGE_Enemy2).getImage(), 
-								u.getX(), u.getY(), u.getWidth(), u.getHeight(), null);
+								u.getX(), u.getY(), (int)((double)u.getWidth()*ClientView.widthFactor), (int)((double)u.getHeight()*ClientView.heightFactor), null);
 					}
 					else if(u.getHpStrength() <= 75) {
 						g2d.drawImage(ImageHandler.getSprite(this.getClass(), ImageHandler.IMAGE_DAMAGE_Enemy1).getImage(), 
-								u.getX(), u.getY(), u.getWidth(), u.getHeight(), null);
+								u.getX(), u.getY(), (int)((double)u.getWidth()*ClientView.widthFactor), (int)((double)u.getHeight()*ClientView.heightFactor), null);
 					}
 				}
 
@@ -228,8 +237,8 @@ public class Board extends JPanel implements ActionListener {
 		}
 		BaseUnit unit = unitTable.get(u.getName());
 		if(unit != null) {
-			unit.setX(u.getX());
-			unit.setY(u.getY());
+			unit.setX((int)((double)u.getX() * ClientView.widthFactor));
+			unit.setY((int)((double)u.getY() * ClientView.heightFactor));
 			unit.setMaxHp(u.getMaxHp());
 			unit.setHp(u.getHp());
 			unit.setAliveState(u.isAlive());
@@ -262,7 +271,7 @@ public class Board extends JPanel implements ActionListener {
 	public void populateStars(int y) {
 		int number = random.nextInt(5);
 		for(int i=0; i<5+number; i++) {
-			int x = random.nextInt(ClientView.width);
+			int x = random.nextInt(this.getWidth());
 			backgroundObejcts.add(new Star(x, y));
 		}
 	}

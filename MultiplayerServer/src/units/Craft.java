@@ -12,9 +12,9 @@ public class Craft {
 	public static final String TYPE_ENEMY_WASP = "EC3";
 	public static final String TYPE_FRIENDLY = "PL1";
 	public static int STANDARD_WIDTH = 64;
-	public static int STANDARD_Height = 64;
-	protected int width = 64;
-	protected int height = 64;
+	public static int STANDARD_HEIGHT = 64;
+	private int width = STANDARD_WIDTH;
+	private int height = STANDARD_HEIGHT;
 	protected String type;
 	protected final int SHIELD_DELAY = 300;
 	private int speed = 1;
@@ -32,7 +32,9 @@ public class Craft {
 	private int shieldDownTime = 0;
 	private int damage = 1;
 
-	public Craft(int x, int y, String type) {
+	public Craft(int width, int height, int x, int y, String type) {
+		this.width = width;
+		this.height = height;
 		this.x = x;
 		this.y = y;
 		this.type = type;

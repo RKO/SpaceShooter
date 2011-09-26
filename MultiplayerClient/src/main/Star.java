@@ -41,7 +41,7 @@ public class Star implements BackgroundObejct {
 	 */
 	@Override
 	public Rectangle getBounds() {
-		return new Rectangle(x, y, 5, 5);
+		return new Rectangle(x, y, (int)(5*ClientView.widthFactor), (int)(5*ClientView.widthFactor));
 	}
 	
 	/* (non-Javadoc)

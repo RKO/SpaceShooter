@@ -1,6 +1,8 @@
 package main;
 
 import java.awt.Color;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JFrame;
@@ -9,12 +11,20 @@ import net.miginfocom.swing.MigLayout;
 import menu.LoginMenu;
 import units.BaseUnit;
 
-public class ClientView extends JFrame implements WindowListener{
+public class ClientView extends JFrame implements WindowListener, ComponentListener{
 	private static final long serialVersionUID = 1L;
-	public static final int width = 1024;//800 //1024
-	public static final int height = 733;//640 // 733// -35
-	public static int menuHight = 100;
+	public static final double SCALE = 0.90;
 	public static final int menuWidth = 175;
+	public static final int menuHight = 100;
+	public static final int defaultWidth = 800;
+	public static final int defaultHeight = 600;
+	public static int width = 1280 + menuWidth;//800 //1024
+	public static int height = 960 + menuHight;//640 // 733// -35
+	public static int realWidth = defaultWidth;
+	public static int realHeight = defaultHeight;
+	public static double widthFactor;
+	public static double heightFactor;
+
 	private Client client;
 	private String name;
 	private Board board;
@@ -23,18 +33,21 @@ public class ClientView extends JFrame implements WindowListener{
 	public ClientView() {
 		setTitle("Login");
 		addWindowListener(this);
-
-		setSize(width, height);
+		widthFactor = ((double)(realWidth-menuWidth)/(double)(width-menuWidth));
+		heightFactor = ((double)(realHeight-menuHight)/(double)(height-menuHight));
+		//setSize(width, height);
 		setLocationRelativeTo(null);
 		setResizable(true);
 
 		setupLoginView();
 		setVisible(true);
 		boardPanel = new JPanel();
-		boardPanel.setBackground(Color.BLACK);
+		boardPanel.setBackground(Color.LIGHT_GRAY);
 		MigLayout migLayout = new MigLayout("", "[][]0[]", "[]0[]");
 		boardPanel.setLayout(migLayout);
 		board = new Board(this, width, height, boardPanel);
+		
+		this.addComponentListener(this);
 	}
 
 	public static void main(String args[]) {
@@ -62,7 +75,7 @@ public class ClientView extends JFrame implements WindowListener{
 	public void setupGameView() {
 		this.getContentPane().removeAll();
 		this.add(boardPanel);
-		setSize(width+menuWidth, height+menuHight);
+		setSize(defaultWidth+menuWidth, defaultHeight+menuHight);
 		board.requestFocus();
 	}
 
@@ -148,5 +161,29 @@ public class ClientView extends JFrame implements WindowListener{
 
 	@Override
 	public void windowOpened(WindowEvent e) {
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		realWidth = e.getComponent().getWidth();
+		realHeight = e.getComponent().getHeight();
+		
+		widthFactor = ((double)(realWidth-menuWidth)/(double)(width-menuWidth));
+		heightFactor = ((double)(realHeight-menuHight)/(double)(height-menuHight));
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		
 	}
 }
